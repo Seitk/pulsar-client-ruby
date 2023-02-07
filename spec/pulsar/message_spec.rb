@@ -111,6 +111,13 @@ RSpec.describe Pulsar::Message do
       end
     end
 
+    describe "redelivery_count" do
+      it "returns the redelivery count" do
+        m = described_class.new("payload")
+        expect(m.redelivery_count).to eq(0)
+      end
+    end
+
     describe "errors" do
       it "rejects second arg that is not a hash" do
         expect do
