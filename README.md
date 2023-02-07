@@ -5,7 +5,7 @@
 Add this line to your application's Gemfile:
 
 ```ruby
-gem "pulsar-client", "~> 2.6.1.pre"
+gem 'pulsar-client', git: 'https://github.com/Seitk/pulsar-client-ruby', branch: '3.1.0'
 ```
 
 And then execute:
@@ -18,7 +18,7 @@ Or install it yourself as:
 
 Note #1: You will need libpulsar (for linking) and libpulsar-dev (for
 C++ client header files, for compiling) installed first. For both, the
-Gem currently targets version 2.6.1. If your libpulsar is older, it will
+Gem currently targets version 3.1.0. If your libpulsar is older, it will
 fail to compile. If it is newer, it _might_ compile is not guaranteed.
 
 Note #2: This is a pre-release version of this Gem. You will need the

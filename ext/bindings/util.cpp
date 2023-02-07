@@ -168,14 +168,14 @@ void CheckResult(pulsar::Result res) {
         throw Exception(rb_ePulsarError_IncompatibleSchema, "Specified schema is incompatible with the topic's schema"); break;
       case pulsar::ResultConsumerAssignError:
         throw Exception(rb_ePulsarError_ConsumerAssignError, "Error when a new consumer connected but can't assign messages to this consumer"); break;
-      // case pulsar::ResultCumulativeAcknowledgementNotAllowedError:
-        // throw Exception(rb_ePulsarError_CumulativeAcknowledgementNotAllowedError, "Not allowed to call cumulativeAcknowledgement in Shared and Key_Shared subscription mode"); break;
-      // case pulsar::ResultTransactionCoordinatorNotFoundError:
-        // throw Exception(rb_ePulsarError_TransactionCoordinatorNotFoundError, "Transaction coordinator not found"); break;
-      // case pulsar::ResultInvalidTxnStatusError:
-      //   throw Exception(rb_ePulsarError_InvalidTxnStatusError, "Invalid txn status error"); break;
-      // case pulsar::ResultNotAllowedError:
-      //   throw Exception(rb_ePulsarError_NotAllowedError, "Not allowed"); break;
+      case pulsar::ResultCumulativeAcknowledgementNotAllowedError:
+        throw Exception(rb_ePulsarError_CumulativeAcknowledgementNotAllowedError, "Not allowed to call cumulativeAcknowledgement in Shared and Key_Shared subscription mode"); break;
+      case pulsar::ResultTransactionCoordinatorNotFoundError:
+        throw Exception(rb_ePulsarError_TransactionCoordinatorNotFoundError, "Transaction coordinator not found"); break;
+      case pulsar::ResultInvalidTxnStatusError:
+        throw Exception(rb_ePulsarError_InvalidTxnStatusError, "Invalid txn status error"); break;
+      case pulsar::ResultNotAllowedError:
+        throw Exception(rb_ePulsarError_NotAllowedError, "Not allowed"); break;
       default:
         throw Exception(rb_ePulsarError, "unexpected pulsar exception: %d", res);
     }
