@@ -1,18 +1,24 @@
+GIT
+  remote: https://github.com/Seitk/rake-compiler
+  revision: 8b3e8b13a1a4f2b9dfb33002eab0773f98f0611e
+  branch: feature/make-install-path
+  specs:
+    rake-compiler (1.2.2)
+      rake
+
 PATH
   remote: .
   specs:
     pulsar-client (2.6.1.pre.beta.2)
       rake-compiler (~> 1.0)
-      rice (~> 2.1)
+      rice (>= 3.0)
 
 GEM
   remote: https://rubygems.org/
   specs:
     diff-lcs (1.4.4)
     rake (10.5.0)
-    rake-compiler (1.1.1)
-      rake
-    rice (2.2.0)
+    rice (4.0.4)
     rspec (3.10.0)
       rspec-core (~> 3.10.0)
       rspec-expectations (~> 3.10.0)
@@ -34,6 +40,7 @@ DEPENDENCIES
   bundler (~> 1.16)
   pulsar-client!
   rake (~> 10.0)
+  rake-compiler!
   rspec (~> 3.0)
 
 BUNDLED WITH
