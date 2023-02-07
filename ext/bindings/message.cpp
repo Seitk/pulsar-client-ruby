@@ -76,6 +76,10 @@ Rice::Object Message::getTopicName() {
   return received ? to_ruby(_msg.getTopicName()) : Rice::Nil;
 }
 
+uint32_t Message::getRedeliveryCount() {
+  return _msg.getRedeliveryCount();
+}
+
 }
 
 using namespace Rice;
@@ -96,5 +100,6 @@ void bind_message(Module& module) {
     .define_method("partition_key", &pulsar_rb::Message::getPartitionKey)
     .define_method("ordering_key", &pulsar_rb::Message::getOrderingKey)
     .define_method("topic", &pulsar_rb::Message::getTopicName)
+    .define_method("redelivery_count", &pulsar_rb::Message::getRedeliveryCount)
     ;
 }

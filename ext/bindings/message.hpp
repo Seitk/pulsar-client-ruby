@@ -31,6 +31,7 @@ namespace pulsar_rb {
     Rice::String getPartitionKey();
     Rice::String getOrderingKey();
     Rice::Object getTopicName();
+    uint32_t getRedeliveryCount();
 
     typedef Rice::Data_Object<Message> ptr;
   };
