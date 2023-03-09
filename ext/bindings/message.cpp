@@ -34,6 +34,10 @@ Message::Message(const std::string& data, Rice::Object arg = Rice::Object()) {
         mb.setPartitionKey(Rice::Object(it->value).to_s().str());
       } else if (key == "ordering_key") {
         mb.setOrderingKey(Rice::Object(it->value).to_s().str());
+      } else if (key == "deliver_after") {
+        mb.setDeliverAfter(std::chrono::milliseconds(from_ruby<uint64_t>(Rice::Object(it->value))));
+      } else if (key == "deliver_at") {
+        mb.setDeliverAt(from_ruby<uint64_t>(Rice::Object(it->value)));
       } else {
         throw Rice::Exception(rb_eArgError, "Unknown keyword argument: %s", key.c_str());
       }
@@ -72,6 +76,10 @@ Rice::Object Message::getTopicName() {
   return received ? to_ruby(_msg.getTopicName()) : Rice::Nil;
 }
 
+uint32_t Message::getRedeliveryCount() {
+  return _msg.getRedeliveryCount();
+}
+
 }
 
 using namespace Rice;
@@ -92,5 +100,6 @@ void bind_message(Module& module) {
     .define_method("partition_key", &pulsar_rb::Message::getPartitionKey)
     .define_method("ordering_key", &pulsar_rb::Message::getOrderingKey)
     .define_method("topic", &pulsar_rb::Message::getTopicName)
+    .define_method("redelivery_count", &pulsar_rb::Message::getRedeliveryCount)
     ;
 }

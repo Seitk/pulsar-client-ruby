@@ -29,6 +29,14 @@ void ClientConfiguration::setOperationTimeoutSeconds(int timeout) {
   _config.setOperationTimeoutSeconds(timeout);
 }
 
+int ClientConfiguration::getConnectionTimeoutMs() {
+  return _config.getConnectionTimeout();
+}
+
+void ClientConfiguration::setConnectionTimeoutMs(int timeout) {
+  _config.setConnectionTimeout(timeout);
+}
+
 int ClientConfiguration::getIOThreads() {
   return _config.getIOThreads();
 }
@@ -208,6 +216,8 @@ void bind_client(Module& module) {
     .define_method("authentication_oauth2_params=", &pulsar_rb::ClientConfiguration::setAuthFromOAuth2Params)
     .define_method("operation_timeout_seconds", &pulsar_rb::ClientConfiguration::getOperationTimeoutSeconds)
     .define_method("operation_timeout_seconds=", &pulsar_rb::ClientConfiguration::setOperationTimeoutSeconds)
+    .define_method("connection_timeout_ms", &pulsar_rb::ClientConfiguration::getConnectionTimeoutMs)
+    .define_method("connection_timeout_ms=", &pulsar_rb::ClientConfiguration::setConnectionTimeoutMs)
     .define_method("io_threads", &pulsar_rb::ClientConfiguration::getIOThreads)
     .define_method("io_threads=", &pulsar_rb::ClientConfiguration::setIOThreads)
     .define_method("message_listener_threads", &pulsar_rb::ClientConfiguration::getMessageListenerThreads)

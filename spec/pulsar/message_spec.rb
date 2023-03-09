@@ -31,6 +31,22 @@ RSpec.describe Pulsar::Message do
       end
     end
 
+    describe "deliver_at" do
+      it "does not raise error" do
+        expect do
+          described_class.new("payload", deliver_at: 1000)
+        end.not_to raise_error
+      end
+    end
+
+    describe "deliver_after" do
+      it "does not raise error" do
+        expect do
+          described_class.new("payload", deliver_after: (Time.now.to_i + 5) * 1000)
+        end.not_to raise_error
+      end
+    end
+
     describe "properties" do
       it "takes properties" do
         m = described_class.new("payload", properties: {"a" => "1", "b" => "2"})
@@ -111,6 +127,13 @@ RSpec.describe Pulsar::Message do
       end
     end
 
+    describe "redelivery_count" do
+      it "returns the redelivery count" do
+        m = described_class.new("payload")
+        expect(m.redelivery_count).to eq(0)
+      end
+    end
+
     describe "errors" do
       it "rejects second arg that is not a hash" do
         expect do
@@ -127,6 +150,18 @@ RSpec.describe Pulsar::Message do
       it "rejects properties that are not a hash" do
         expect do
           described_class.new("payload", properties: [])
+        end.to raise_exception(TypeError)
+      end
+
+      it "rejects deliver at that is not an integer" do
+        expect do
+          described_class.new("payload", deliver_at: "x")
+        end.to raise_exception(TypeError)
+      end
+
+      it "rejects deliver after that is not an integer" do
+        expect do
+          described_class.new("payload", deliver_after: "x")
         end.to raise_exception(TypeError)
       end
     end
