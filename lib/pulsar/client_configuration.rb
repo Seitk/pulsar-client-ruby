@@ -134,6 +134,7 @@ module Pulsar
       populate_one(config, :authentication_token)
       populate_one(config, :authentication_oauth2_params)
       populate_one(config, :operation_timeout_seconds)
+      populate_one(config, :connection_timeout_ms)
       populate_one(config, :io_threads)
       populate_one(config, :message_listener_threads)
       populate_one(config, :concurrent_lookup_requests)
