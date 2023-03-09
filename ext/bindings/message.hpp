@@ -35,6 +35,15 @@ namespace pulsar_rb {
 
     typedef Rice::Data_Object<Message> ptr;
   };
+
+  class Messages {
+  public:
+    pulsar::Messages _msgs;
+    Messages(const pulsar::Messages& msgs) : _msgs(msgs) {};
+    Rice::Array getMessages();
+
+    typedef Rice::Data_Object<Messages> ptr;
+  };
 };
 
 void bind_message(Rice::Module& module);

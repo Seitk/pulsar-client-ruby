@@ -18,6 +18,12 @@ typedef struct {
 
 typedef struct {
   pulsar::Consumer& consumer;
+  pulsar::Messages messages;
+  pulsar::Result result;
+} consumer_batch_receive_job;
+
+typedef struct {
+  pulsar::Consumer& consumer;
   pulsar::Result result;
 } consumer_close_task;
 
@@ -41,6 +47,24 @@ pulsar::Message consumer_receive(pulsar::Consumer& consumer, unsigned int timeou
 Message::ptr Consumer::receive(unsigned int timeout_ms) {
   pulsar::Message message = consumer_receive(_consumer, timeout_ms);
   return Message::ptr(new Message(message));
+}
+
+void* consumer_batch_receive_nogvl(void* jobPtr) {
+  consumer_batch_receive_job& job = *(consumer_batch_receive_job*)jobPtr;
+  job.result = job.consumer.batchReceive(job.messages);
+  return nullptr;
+}
+
+pulsar::Messages consumer_batch_receive(pulsar::Consumer& consumer) {
+  consumer_batch_receive_job job = { consumer };
+  rb_thread_call_without_gvl(&consumer_batch_receive_nogvl, &job, RUBY_UBF_IO, nullptr);
+  CheckResult(job.result);
+  return job.messages;
+}
+
+Messages::ptr Consumer::batch_receive() {
+  pulsar::Messages messages = consumer_batch_receive(_consumer);
+  return Messages::ptr(new Messages(messages));
 }
 
 void Consumer::acknowledge(const Message& message) {
@@ -71,6 +95,7 @@ void bind_consumer(Module &module) {
   define_class_under<pulsar_rb::Consumer>(module, "Consumer")
     .define_constructor(Constructor<pulsar_rb::Consumer>())
     .define_method("receive", &pulsar_rb::Consumer::receive, (Arg("timeout_ms") = 0))
+    .define_method("batch_receive", &pulsar_rb::Consumer::batch_receive)
     .define_method("acknowledge", &pulsar_rb::Consumer::acknowledge)
     .define_method("negative_acknowledge", &pulsar_rb::Consumer::negative_acknowledge)
     .define_method("close", &pulsar_rb::Consumer::close)
@@ -86,6 +111,7 @@ void bind_consumer(Module &module) {
     .define_value("Latest", InitialPositionLatest)
     .define_value("Earliest", InitialPositionEarliest);
 
+  // TODO: Add batch receive policy
   define_class_under<pulsar_rb::ConsumerConfiguration>(module, "ConsumerConfiguration")
     .define_constructor(Constructor<pulsar_rb::ConsumerConfiguration>())
     .define_method("consumer_type", &ConsumerConfiguration::getConsumerType)
