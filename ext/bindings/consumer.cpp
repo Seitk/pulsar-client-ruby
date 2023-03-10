@@ -111,7 +111,13 @@ void bind_consumer(Module &module) {
     .define_value("Latest", InitialPositionLatest)
     .define_value("Earliest", InitialPositionEarliest);
 
-  // TODO: Add batch receive policy
+  define_class_under<pulsar_rb::BatchReceivePolicy>(module, "BatchReceivePolicy")
+    .define_constructor(Constructor<pulsar_rb::BatchReceivePolicy, int, int, int>())
+    .define_method("max_num_messages", &pulsar_rb::BatchReceivePolicy::getMaxNumMessages)
+    .define_method("max_num_bytes", &pulsar_rb::BatchReceivePolicy::getMaxNumBytes)
+    .define_method("timeout_ms", &pulsar_rb::BatchReceivePolicy::getTimeoutMs)
+    ;
+
   define_class_under<pulsar_rb::ConsumerConfiguration>(module, "ConsumerConfiguration")
     .define_constructor(Constructor<pulsar_rb::ConsumerConfiguration>())
     .define_method("consumer_type", &ConsumerConfiguration::getConsumerType)
@@ -125,6 +131,8 @@ void bind_consumer(Module &module) {
     .define_method("max_total_receiver_queue_size_across_partitions=", &ConsumerConfiguration::setMaxTotalReceiverQueueSizeAcrossPartitions)
     .define_method("consumer_name", &ConsumerConfiguration::getConsumerName)
     .define_method("consumer_name=", &ConsumerConfiguration::setConsumerName)
+    .define_method("batch_receive_policy", &ConsumerConfiguration::getBatchReceivePolicy)
+    .define_method("batch_receive_policy=", &ConsumerConfiguration::setBatchReceivePolicy)
     .define_method("unacked_messages_timeout_ms", &ConsumerConfiguration::getUnAckedMessagesTimeoutMs)
     .define_method("unacked_messages_timeout_ms=", &ConsumerConfiguration::setUnAckedMessagesTimeoutMs)
     .define_method("negative_ack_redelivery_delay_ms", &ConsumerConfiguration::getNegativeAckRedeliveryDelayMs)

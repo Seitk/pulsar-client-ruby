@@ -26,6 +26,7 @@ namespace pulsar_rb {
   // direct typedef instead of wrapping because implementations don't need any
   // wrapping. but still re-namespaced for consistency
   typedef pulsar::ConsumerConfiguration ConsumerConfiguration;
+  typedef pulsar::BatchReceivePolicy BatchReceivePolicy;
 };
 
 void bind_consumer(Rice::Module& module);
