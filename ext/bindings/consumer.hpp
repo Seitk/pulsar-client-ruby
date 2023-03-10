@@ -15,6 +15,7 @@ namespace pulsar_rb {
     Consumer(const pulsar::Consumer& consumer) : _consumer(consumer) {}
 
     Message::ptr receive(unsigned int timeout_ms=0);
+    Messages::ptr batch_receive();
     void acknowledge(const Message& message);
     void negative_acknowledge(const Message& message);
     void close();
@@ -25,6 +26,7 @@ namespace pulsar_rb {
   // direct typedef instead of wrapping because implementations don't need any
   // wrapping. but still re-namespaced for consistency
   typedef pulsar::ConsumerConfiguration ConsumerConfiguration;
+  typedef pulsar::BatchReceivePolicy BatchReceivePolicy;
 };
 
 void bind_consumer(Rice::Module& module);

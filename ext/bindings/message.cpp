@@ -80,6 +80,15 @@ uint32_t Message::getRedeliveryCount() {
   return _msg.getRedeliveryCount();
 }
 
+Rice::Array Messages::getMessages() {
+  Rice::Array messages;
+  for (const pulsar::Message& msg : _msgs) {
+    Message::ptr message = Message::ptr(new Message(msg));
+    messages.push(message);
+  }
+  return to_ruby(messages);
+}
+
 }
 
 using namespace Rice;
@@ -101,5 +110,10 @@ void bind_message(Module& module) {
     .define_method("ordering_key", &pulsar_rb::Message::getOrderingKey)
     .define_method("topic", &pulsar_rb::Message::getTopicName)
     .define_method("redelivery_count", &pulsar_rb::Message::getRedeliveryCount)
+    ;
+
+  define_class_under<pulsar_rb::Messages>(module, "Messages")
+    .define_constructor(Constructor<pulsar_rb::Messages, const pulsar::Messages&>())
+    .define_method("to_a", &pulsar_rb::Messages::getMessages)
     ;
 }
